@@ -56,7 +56,6 @@ class WRDClient():
             "GuidelineName": x["GuidelineName"],
             "GuidelineLongName": x["GuidelineLongName"]}, response))
         return data
-        return response
 
     def get_guidelines_detail(self):
         return self.__httpGet(self.root_url + self.guideline_detail_url)
