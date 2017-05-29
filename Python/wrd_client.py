@@ -77,7 +77,8 @@ class WRDClient():
                     "GuidelineName":x["GuidelineName"],
                     "Analyte":x["AnalyteName"],
                     "Points":list(map(lambda p:{
-                        "DateTime":p["DateTime"],"Value":p["Value"]}, x["StandardValuePoints"]))}, http_data["StandardData"])) }
+                        "DateTime":p["DateTime"],
+                        "Value":p["Value"]}, x["StandardValuePoints"]))}, http_data["StandardData"])) }
         return data
 
     def __httpGet(self, url):
