@@ -23,6 +23,7 @@ class WRDClient():
             raise RuntimeError("Get location fail with status code" + r.status_code)
 
     def __del__(self):
+        print("Session close")
         self.session.close()
 
     def get_locations(self):
@@ -86,13 +87,13 @@ class WRDClient():
         if 200 == response.status_code:
             return response.json()
         else:
-            print("Get data fail with status code" + response.status_code)
-            raise ConnectionError("Get data fail with status code" + response.status_code)
+            print("Get data fail with status code" + str(response.status_code))
+            raise ConnectionError("Get data fail with status code" + str(response.status_code))
 
     def __httpPost(self, url, json_data):
         response = self.session.post(url, json=json_data)
         if 200 == response.status_code:
             return response.json()
         else:
-            print("Get data fail with status code" + response.status_code)
-            raise ConnectionError("Get data fail with status code" + response.status_code)
+            print("Get data fail with status code" + str(response.status_code))
+            raise ConnectionError("Get data fail with status code" + str(response.status_code))
