@@ -1,10 +1,14 @@
 # WRD_Client
 WRD client in various language
+Compatible with WRD V5.0.2.1
 
 ## Python
 
 ### Initial client
-Parameters: url Of WRD, username, password
+Parameters: 
+- url Of WRD (url must not end with slash "/"), 
+- username, 
+- password
 
 Example: 
 ```python
@@ -25,7 +29,8 @@ Output:
 ```
 
 ### Get location detail
-Parameters: Location Ids string
+Parameters: 
+- Location Ids string
 
 Example: 
 ```python
@@ -61,7 +66,12 @@ Output:
 ```
 
 ### Get analyte data and calculated guideline data
-Parameters: Start Date, End Date, Station Name, Analyte Names, Guideline Names
+Parameters: 
+- Start Date, 
+- End Date, 
+- Station Name, 
+- Analyte Names, 
+- Guideline Names
 
 Example: 
 ```python
