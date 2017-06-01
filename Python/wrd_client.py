@@ -24,8 +24,7 @@ class WRDClient():
             print("Authentication session fail with status code:" + r.status_code)
             raise RuntimeError("Get location fail with status code" + r.status_code)
 
-    def __del__(self):
-        print("Session close")
+    def __del__(self):        
         self.session.close()
 
     def get_locations(self):
