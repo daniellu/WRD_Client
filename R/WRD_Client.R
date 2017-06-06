@@ -37,7 +37,7 @@ authenticate_wrd <- function(wrd_url, username, password){
   )
   agent="Mozilla/5.0" #or whatever 
   
-  res <- POST(loginurl, body = pars, encode = "form", verbose())
+  res <- POST(loginurl, body = pars, encode = "form")
 }
 
 get_report_data <- function(wrd_url, curl_handler, 
@@ -45,11 +45,9 @@ get_report_data <- function(wrd_url, curl_handler,
   report_data_url <- paste(wrd_url, "/API/WaterQuality/Graph")
   
   analyte_data = lapply(analytes, function(x){ return(list(Analyte=x,LocationName=station))})
-  print(analyte_data)
   guideline_data = lapply(guidelines, function(x){ return(list(GuidelineName=x))})
-  print(guideline_data)
   
-  pars=list(
+  args=list(
     StartDate=start_date,
     EndDate=end_date,
     StationName=station,
@@ -57,27 +55,20 @@ get_report_data <- function(wrd_url, curl_handler,
     WaterQualityStandards=guideline_data
   )
   
-  print(pars)
-  res <- POST(report_data_url, body = pars, encode = "form", verbose())
+  print(toJSON(args, auto_unbox=TRUE))
+  #res <- POST(report_data_url, body = args, encode = "form", verbose())
+  res <- POST(
+    url = report_data_url,
+    body = toJSON(args, auto_unbox=TRUE),
+    content_type_json(),
+    encode = "json",
+    verbose()
+  )
   return(res)
 }
 
 
-wrd_url <- "http://localhost:50772"
 
-#list_data <- get_guideline_list(wrd_url)
-#detail_data <- get_guideline_detail_list(wrd_url)
-
-authenticate_wrd(wrd_url, "Wellgreen", "Welcome123!")
-location_list_data <- get_location_list(wrd_url)
-
-analyte_data <- c("Aluminum (Al)-Total")
-guideline_data <- c("BC_WWS_ST")
-
-report_data <- get_report_data(wrd_url, curl_handler, 
-                               "Jan 01, 2016", "May 26, 2017", "DR-195.8", 
-                               analyte_data, guideline_data)
-print(report_data)
 
 
 
