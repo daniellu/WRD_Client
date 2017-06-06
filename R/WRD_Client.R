@@ -7,7 +7,7 @@ get_guideline_list <- function(wrd_url){
   guideline_list_part <- "/API/WaterQualityGuideline"
   request_url <- paste(wrd_url, guideline_list_part)
   response <- GET(request_url)
-  guideline_list_data <- fromJSON(str(content(response)))
+  guideline_list_data <- content(response)
   
   return(guideline_list_data)
 }
@@ -16,7 +16,7 @@ get_guideline_detail_list <- function(wrd_url){
   guideline_detail_list_part <- "/API/WaterQualityGuideline/Detail"
   request_url <- paste(wrd_url, guideline_detail_list_part)
   response <- GET(request_url)
-  guideline_detail_list_data <- fromJSON(str(content(response)))
+  guideline_detail_list_data <- content(response)
   
   return(guideline_detail_list_data)
 }
@@ -25,7 +25,7 @@ get_location_list <- function(wrd_url, curl_handler){
   location_list_part <- "/API/WaterQuality/Location/List"
   request_url <- paste(wrd_url, location_list_part)
   data <- GET(request_url)
-  return(data)
+  return(content(data))
 }
 
 authenticate_wrd <- function(wrd_url, username, password){
@@ -54,9 +54,6 @@ get_report_data <- function(wrd_url, curl_handler,
     WaterQualityDatasets=analyte_data,
     WaterQualityStandards=guideline_data
   )
-  
-  print(toJSON(args, auto_unbox=TRUE))
-  #res <- POST(report_data_url, body = args, encode = "form", verbose())
   res <- POST(
     url = report_data_url,
     body = toJSON(args, auto_unbox=TRUE),
@@ -64,7 +61,7 @@ get_report_data <- function(wrd_url, curl_handler,
     encode = "json",
     verbose()
   )
-  return(res)
+  return(content(res))
 }
 
 
