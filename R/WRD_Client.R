@@ -6,18 +6,26 @@ get_guideline_list <- function(wrd_url){
   guideline_list_part <- "/API/WaterQualityGuideline"
   request_url <- paste(wrd_url, guideline_list_part)
   response <- GET(request_url)
-  guideline_list_data <- content(response)
   
-  return(guideline_list_data)
+  if(status_code(response) == 200){
+    guideline_list_data <- content(response)
+    return(guideline_list_data)
+  }
+  
+  stop("Fail to get guideline list data from WRD, please try again or contact the EIS team.")
 }
 
 get_guideline_detail_list <- function(wrd_url){
   guideline_detail_list_part <- "/API/WaterQualityGuideline/Detail"
   request_url <- paste(wrd_url, guideline_detail_list_part)
   response <- GET(request_url)
-  guideline_detail_list_data <- content(response)
   
-  return(guideline_detail_list_data)
+  if(status_code(response) == 200){
+    guideline_detail_list_data <- content(response)
+    return(guideline_detail_list_data)
+  }
+  
+  stop("Fail to get guideline detail data from WRD, please try again or contact the EIS team.")
 }
 
 get_location_list <- function(wrd_url, curl_handler){
@@ -71,13 +79,19 @@ get_report_data <- function(wrd_url, curl_handler,
     WaterQualityDatasets=analyte_data,
     WaterQualityStandards=guideline_data
   )
-  res <- POST(
+  response <- POST(
     url = report_data_url,
     body = toJSON(args, auto_unbox=TRUE),
     content_type_json(),
     encode = "json"
   )
-  return(content(res))
+  
+  if(status_code(response) == 200){
+    return(content(response))
+  }
+  
+  stop("Fail to get report data from WRD, please try again or contact the EIS team.")
+  
 }
 
 
