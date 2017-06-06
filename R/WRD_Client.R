@@ -87,7 +87,40 @@ get_report_data <- function(wrd_url, curl_handler,
   )
   
   if(status_code(response) == 200){
-    return(content(response))
+    raw_content = content(response)
+    
+    analyte_result_data = lapply(raw_content$AnalytesData, 
+                                 function(x){ 
+                                   return(
+                                     list(AnalyteName=x$AnalyteName,
+                                          Location=x$StationId,
+                                          Unit=x$Unit,
+                                          Points=lapply(x$Points, function(p){
+                                            return(list(
+                                              DateTime=p$DateTime,
+                                              Value=p$Value,
+                                              DetectionLimit=p$DetectionLimit
+                                            ))
+                                          }))
+                                     )})
+    
+    guideline_result_data = lapply(raw_content$StandardData, 
+                                 function(x){ 
+                                   return(
+                                     list(GuidelineName=x$GuidelineName,
+                                          AnalyteName=x$AnalyteName,
+                                          Location=x$StationId,
+                                          Unit=x$Unit,
+                                          Points=lapply(x$StandardValuePoints, function(p){
+                                            return(list(
+                                              DateTime=p$DateTime,
+                                              Value=p$Value
+                                            ))
+                                          }))
+                                   )})
+    
+    result <- list(AnalytesData=analyte_result_data,GuidelineData=guideline_result_data)
+    return(result)
   }
   
   stop("Fail to get report data from WRD, please try again or contact the EIS team.")
