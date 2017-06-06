@@ -1,4 +1,3 @@
-# https://cran.rstudio.com/bin/windows/contrib/3.4/RCurl_1.95-4.8.zip
 # install packages
 library(jsonlite)
 library(httr)
@@ -24,8 +23,26 @@ get_guideline_detail_list <- function(wrd_url){
 get_location_list <- function(wrd_url, curl_handler){
   location_list_part <- "/API/WaterQuality/Location/List"
   request_url <- paste(wrd_url, location_list_part)
-  data <- GET(request_url)
-  return(content(data))
+  res <- GET(request_url)
+  if(status_code(res) == 200){
+    location_content = content(res)
+    
+    data = lapply(location_content, function(x){ 
+      return(
+        list(LocationIdentifier=x$LocationIdentifier,
+             Description=x$LocationDescription,
+             Latitude=x$Latitude,
+             Longtitude=x$Longtitude,
+             LocationType=x$LocationType)
+        )
+      })
+    
+    return(data)  
+  }
+  else{
+    stop("Fail to fetch location list data from WRD, please try again or contact the EIS team.")
+  }
+  
 }
 
 authenticate_wrd <- function(wrd_url, username, password){
@@ -58,8 +75,7 @@ get_report_data <- function(wrd_url, curl_handler,
     url = report_data_url,
     body = toJSON(args, auto_unbox=TRUE),
     content_type_json(),
-    encode = "json",
-    verbose()
+    encode = "json"
   )
   return(content(res))
 }
