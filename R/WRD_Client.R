@@ -1,3 +1,4 @@
+#Compatible with WRD V5.0.2.2
 # install packages
 library(jsonlite)
 library(httr)
