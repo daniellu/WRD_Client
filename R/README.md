@@ -76,7 +76,7 @@ Parameters:
 
 Example: 
 ```python
-report_data <- get_report_data(wrd_url, curl_handler, 
+report_data <- get_report_data(wrd_url, 
                                "Jan 01, 2016", "May 26, 2017", "DR-195.8", 
                                c("Aluminum (Al)-Total", "Aluminum (Al)-Dissolved"), 
                                c("BC_WWS_ST", "Yukon"))

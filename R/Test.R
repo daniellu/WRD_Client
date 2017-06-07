@@ -11,7 +11,7 @@ detail_data <- get_guideline_detail_list(wrd_url)
 location_list_data <- get_location_list(wrd_url)
 location_detail_date <- get_location_detail(wrd_url, "AdC-0.1")
 
-report_data <- get_report_data(wrd_url, curl_handler, 
+report_data <- get_report_data(wrd_url, 
                                "Jan 01, 2016", "May 26, 2017", "DR-195.8", 
                                c("Aluminum (Al)-Total", "Aluminum (Al)-Dissolved"), 
                                c("BC_WWS_ST", "Yukon"))
