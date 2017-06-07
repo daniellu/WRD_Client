@@ -29,7 +29,7 @@ get_guideline_detail_list <- function(wrd_url){
   stop("Fail to get guideline detail data from WRD, please try again or contact the EIS team.")
 }
 
-get_location_list <- function(wrd_url, curl_handler){
+get_location_list <- function(wrd_url){
   location_list_part <- "/API/WaterQuality/Location/List"
   request_url <- paste(wrd_url, location_list_part)
   res <- GET(request_url)
