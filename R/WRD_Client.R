@@ -5,7 +5,7 @@ library(httr)
 
 get_guideline_list <- function(wrd_url){
   guideline_list_part <- "/API/WaterQualityGuideline"
-  request_url <- paste(wrd_url, guideline_list_part)
+  request_url <- paste(wrd_url, guideline_list_part, sep="")
   response <- GET(request_url)
   
   if(status_code(response) == 200){
@@ -18,7 +18,7 @@ get_guideline_list <- function(wrd_url){
 
 get_guideline_detail_list <- function(wrd_url){
   guideline_detail_list_part <- "/API/WaterQualityGuideline/Detail"
-  request_url <- paste(wrd_url, guideline_detail_list_part)
+  request_url <- paste(wrd_url, guideline_detail_list_part, sep="")
   response <- GET(request_url)
   
   if(status_code(response) == 200){
@@ -31,7 +31,7 @@ get_guideline_detail_list <- function(wrd_url){
 
 get_location_list <- function(wrd_url){
   location_list_part <- "/API/WaterQuality/Location/List"
-  request_url <- paste(wrd_url, location_list_part)
+  request_url <- paste(wrd_url, location_list_part, sep="")
   res <- GET(request_url)
   if(status_code(res) == 200){
     location_content = content(res)
@@ -54,8 +54,42 @@ get_location_list <- function(wrd_url){
   
 }
 
+get_location_detail <- function(wrd_url, locationId){
+  location_detail_part <- "/API/WaterQuality/Location/Detail/"
+  request_url <- paste(wrd_url, location_detail_part, locationId, sep="")
+  res <- GET(request_url)
+  if(status_code(res) == 200){
+    location_content = content(res)
+    
+    location_data = lapply(location_content$Locations, function(x){ 
+      return(
+        list(LocationName=x$Name,
+             LocationType=x$Type,
+             Notes=x$Notes)
+      )
+    })
+    
+    wq_data = lapply(location_content$WaterQualityDatasets, function(x){ 
+      return(
+        list(LocationName=x$LocationName,
+             Analyte=x$Analyte,
+             NumberOfRecords=x$NumberOfRecords,
+             FirstRecordDate=x$FirstRecordDate,
+             LastRecordDate=x$LastRecordDate)
+      )
+    })
+    
+    data = list(Locations=location_data, Analytes=wq_data)
+    
+    return(data)  
+  }
+  else{
+    stop("Fail to fetch location detail data from WRD, please try again or contact the EIS team.")
+  }
+}
+
 authenticate_wrd <- function(wrd_url, username, password){
-  loginurl <- paste(wrd_url, "/Account/LogOn")
+  loginurl <- paste(wrd_url, "/Account/LogOn", sep="")
   #Set user account data and agent
   pars=list(
     Username=username,
@@ -68,7 +102,7 @@ authenticate_wrd <- function(wrd_url, username, password){
 
 get_report_data <- function(wrd_url, curl_handler, 
                             start_date, end_date, station, analytes, guidelines){
-  report_data_url <- paste(wrd_url, "/API/WaterQuality/Graph")
+  report_data_url <- paste(wrd_url, "/API/WaterQuality/Graph", sep="")
   
   analyte_data = lapply(analytes, function(x){ return(list(Analyte=x,LocationName=station))})
   guideline_data = lapply(guidelines, function(x){ return(list(GuidelineName=x))})
