@@ -1,0 +1,11 @@
+Package: wrdr
+Type: Package
+Title: WRD R Client
+Version: 0.1.0
+Author: person("Zhanxun", "Lu", email = "zlu@hatfieldgroup.com", role = c("aut", "cre"))
+Maintainer: Zhanxun Lu <zlu@hatfieldgroup.com>
+Description: Provide R client to connect and fetch data from WRD.
+Depends: R (>= 3.4.0),jsonlite (>= 1.5),httr (>= 1.2.1)
+License: Mozilla Public License 2.0
+Encoding: UTF-8
+LazyData: true

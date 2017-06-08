@@ -1,7 +1,24 @@
-#Compatible with WRD V5.0.2.2
-# install packages
+# Hello, world!
+#
+# This is an example function named 'hello'
+# which prints 'Hello, world!'.
+#
+# You can learn more about package authoring with RStudio at:
+#
+#   http://r-pkgs.had.co.nz/
+#
+# Some useful keyboard shortcuts for package authoring:
+#
+#   Build and Reload Package:  'Ctrl + Shift + B'
+#   Check Package:             'Ctrl + Shift + E'
+#   Test Package:              'Ctrl + Shift + T'
+
 library(jsonlite)
 library(httr)
+
+hello <- function() {
+  print("WRD Client, compatible wrd version 5.0.2.2")
+}
 
 authenticate_wrd <- function(wrd_url, username, password){
   loginurl <- paste(wrd_url, "/Account/LogOn", sep="")
@@ -10,8 +27,8 @@ authenticate_wrd <- function(wrd_url, username, password){
     Username=username,
     Password=password
   )
-  agent="Mozilla/5.0" #or whatever 
-  
+  agent="Mozilla/5.0" #or whatever
+
   res <- POST(loginurl, body = pars, encode = "form")
 }
 
@@ -19,7 +36,7 @@ get_response_data <- function(response){
   if(status_code(response) == 200){
     return(content(response))
   }
-  
+
   stop("Fail to get data from WRD, please try again or contact the EIS team.")
 }
 
@@ -42,7 +59,7 @@ get_location_list <- function(wrd_url){
   request_url <- paste(wrd_url, location_list_part, sep="")
   res <- GET(request_url)
   location_content = get_response_data(res)
-  data = lapply(location_content, function(x){ 
+  data = lapply(location_content, function(x){
     return(
       list(LocationIdentifier=x$LocationIdentifier,
            Description=x$LocationDescription,
@@ -51,9 +68,9 @@ get_location_list <- function(wrd_url){
            LocationType=x$LocationType)
     )
   })
-  
+
   return(data)
-  
+
 }
 
 get_location_detail <- function(wrd_url, locationId){
@@ -61,16 +78,16 @@ get_location_detail <- function(wrd_url, locationId){
   request_url <- paste(wrd_url, location_detail_part, locationId, sep="")
   res <- GET(request_url)
   location_content = get_response_data(res)
-  
-  location_data = lapply(location_content$Locations, function(x){ 
+
+  location_data = lapply(location_content$Locations, function(x){
     return(
       list(LocationName=x$Name,
            LocationType=x$Type,
            Notes=x$Notes)
     )
   })
-  
-  wq_data = lapply(location_content$WaterQualityDatasets, function(x){ 
+
+  wq_data = lapply(location_content$WaterQualityDatasets, function(x){
     return(
       list(LocationName=x$LocationName,
            Analyte=x$Analyte,
@@ -79,9 +96,9 @@ get_location_detail <- function(wrd_url, locationId){
            LastRecordDate=x$LastRecordDate)
     )
   })
-  
+
   data = list(Locations=location_data, Analytes=wq_data)
-  
+
   return(data)
 }
 
@@ -90,10 +107,10 @@ get_location_detail <- function(wrd_url, locationId){
 get_report_data <- function(wrd_url,
                             start_date, end_date, station, analytes, guidelines){
   report_data_url <- paste(wrd_url, "/API/WaterQuality/Graph", sep="")
-  
+
   analyte_data = lapply(analytes, function(x){ return(list(Analyte=x,LocationName=station))})
   guideline_data = lapply(guidelines, function(x){ return(list(GuidelineName=x))})
-  
+
   args=list(
     StartDate=start_date,
     EndDate=end_date,
@@ -107,11 +124,11 @@ get_report_data <- function(wrd_url,
     content_type_json(),
     encode = "json"
   )
-  
+
   raw_content = get_response_data(response)
-  
-  analyte_result_data = lapply(raw_content$AnalytesData, 
-                               function(x){ 
+
+  analyte_result_data = lapply(raw_content$AnalytesData,
+                               function(x){
                                  return(
                                    list(AnalyteName=x$AnalyteName,
                                         Location=x$StationId,
@@ -124,9 +141,9 @@ get_report_data <- function(wrd_url,
                                           ))
                                         }))
                                  )})
-  
-  guideline_result_data = lapply(raw_content$StandardData, 
-                                 function(x){ 
+
+  guideline_result_data = lapply(raw_content$StandardData,
+                                 function(x){
                                    return(
                                      list(GuidelineName=x$GuidelineName,
                                           AnalyteName=x$AnalyteName,
@@ -139,14 +156,8 @@ get_report_data <- function(wrd_url,
                                             ))
                                           }))
                                    )})
-  
+
   result <- list(AnalytesData=analyte_result_data,GuidelineData=guideline_result_data)
   return(result)
-  
+
 }
-
-
-
-
-
-
