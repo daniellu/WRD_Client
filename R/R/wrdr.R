@@ -104,7 +104,7 @@ get_location_detail <- function(wrd_url, locationId){
 
 
 
-get_report_data <- function(wrd_url,
+get_wrd_wq_report_data <- function(wrd_url,
                             start_date, end_date, station, analytes, guidelines){
   report_data_url <- paste(wrd_url, "/API/WaterQuality/Graph", sep="")
 
