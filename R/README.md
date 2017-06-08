@@ -1,7 +1,7 @@
 ## Compatible with WRD V5.0.2.2
 
 ## R
-Depend on libraries jsonlit, httr
+Depend on libraries jsonlite, httr
 ### Authenticate client
 Parameters: 
 - url Of WRD (url must not end with slash "/"), 
@@ -39,7 +39,7 @@ Example:
 ```
 Output: 
 ```R
-
+location detail data
 ```
 
 ### Get guidelines list
@@ -51,7 +51,7 @@ list_data <- get_guideline_list(wrd_url)
 ```
 Output: 
 ```R
-
+location list with available analytes
 ```
 
 ### Get guidelines detail list
@@ -63,7 +63,7 @@ detail_data <- get_guideline_detail_list(wrd_url)
 ```
 Output: 
 ```json
-
+location list with available analytes and equations
 ```
 
 ### Get analyte data and calculated guideline data
@@ -82,3 +82,5 @@ report_data <- get_report_data(wrd_url,
                                c("BC_WWS_ST", "Yukon"))
 ```
 Output:
+
+report data
